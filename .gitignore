@@ -1,0 +1,18 @@
+# datasets
+data/
+*.csv
+
+# databases
+*.db
+
+# python environmnt
+venv/
+env/
+
+# cache
+__pycache__/
+.ipynb_checkpoints/
+
+# system files
+.DS_Store
+Thumbs.db
