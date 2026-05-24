@@ -1,6 +1,7 @@
 # datasets
-data/
+data/MachineLearningRating_v3.txt
 *.csv
+*.txt
 
 # databases
 *.db
