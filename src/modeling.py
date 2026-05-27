@@ -11,6 +11,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
+from sklearn.impute import SimpleImputer
 
 
 # -----------------------------
@@ -23,17 +24,26 @@ def split_data(df, target, test_size=0.2, random_state=42):
     return train_test_split(X, y, test_size=test_size, random_state=random_state)
 
 
-# -----------------------------
-# PREPROCESSOR
-# -----------------------------
+
+
+
 def build_preprocessor(X):
     categorical_cols = X.select_dtypes(include=["object", "category"]).columns
     numerical_cols = X.select_dtypes(include=["int64", "float64"]).columns
 
+    numeric_transformer = Pipeline(steps=[
+        ("imputer", SimpleImputer(strategy="median"))
+    ])
+
+    categorical_transformer = Pipeline(steps=[
+        ("imputer", SimpleImputer(strategy="most_frequent")),
+        ("encoder", OneHotEncoder(handle_unknown="ignore"))
+    ])
+
     preprocessor = ColumnTransformer(
         transformers=[
-            ("num", "passthrough", numerical_cols),
-            ("cat", OneHotEncoder(handle_unknown="ignore"), categorical_cols),
+            ("num", numeric_transformer, numerical_cols),
+            ("cat", categorical_transformer, categorical_cols),
         ]
     )
 
